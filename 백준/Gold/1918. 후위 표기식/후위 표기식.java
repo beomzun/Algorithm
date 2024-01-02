@@ -39,7 +39,7 @@ class Solution {
                             if (priority(stack.peek()) < priority(val)) {
                                 stack.push(val);
                             } else {
-                                while (!stack.empty() && !stack.peek().equals("(") && priority(stack.peek()) >= priority(val)) {
+                                while (!stack.empty() && priority(stack.peek()) >= priority(val)) {
                                     queue.add(stack.pop());
                                 }
                                 stack.push(val);
@@ -61,9 +61,11 @@ class Solution {
 
     public static int priority(String operator) {
         if (operator.equals("*") || operator.equals("/")) {
-            return 1;
-        } else {
+            return 2;
+        } else if (operator.equals("(")) {
             return 0;
+        } else {
+            return 1;
         }
     }
 
