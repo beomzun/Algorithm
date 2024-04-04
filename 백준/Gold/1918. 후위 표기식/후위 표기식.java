@@ -1,76 +1,56 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Stack;
+import java.util.*;
+import java.io.*;
 
 class Solution {
-
     public void solution() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        String[] arr = br.readLine().split("");
-        Stack<String> stack = new Stack<>();
-        Queue<String> queue = new LinkedList<>();
-        String val;
-        for (int i = 0; i < arr.length; i++) {
-            val = arr[i];
-            //피연산자
-            if (val.compareTo("A") >= 0 && val.compareTo("Z") <= 0) {
-                queue.add(val);
-            } else {    //연산자   //괄호처리
-                if (val.equals("(")) {
-                    stack.push(val);
-                } else if (val.equals(")")) {
-                    while (!stack.empty() && !stack.peek().equals("(")) {
-                        queue.add(stack.pop());
+        String s = br.readLine();
+        Stack<Character> stack = new Stack<>();
+        char tmp;
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c >= 'A' && c <= 'Z') {
+                bw.write(c);
+            } else {
+                if (c == '(') {
+                    stack.push(c);
+                } else if (c == ')') {
+                    tmp = stack.pop();
+                    while (tmp != '(') {
+                        bw.write(tmp);
+                        tmp = stack.pop();
                     }
-                    stack.pop();
-                } else {    //연산자 우선순위
-                    if (stack.empty()) {
-                        stack.push(val);
+                } else {
+                    if (stack.isEmpty()) {
+                        stack.push(c);
                     } else {
-                        if (stack.peek().equals("(")) {
-                            stack.push(val);
-                        } else {
-                            if (priority(stack.peek()) < priority(val)) {
-                                stack.push(val);
-                            } else {
-                                while (!stack.empty() && priority(stack.peek()) >= priority(val)) {
-                                    queue.add(stack.pop());
-                                }
-                                stack.push(val);
+                        while (priority(stack.peek()) >= priority(c)) {
+                            bw.write(stack.pop());
+                            if (stack.isEmpty()) {
+                                break;
                             }
                         }
+                        stack.push(c);
                     }
                 }
             }
         }
-        while (!stack.empty()) {
-            queue.add(stack.pop());
-        }
-        while (!queue.isEmpty()) {
-            bw.write(queue.remove());
+        while (!stack.isEmpty()) {
+            bw.write(stack.pop());
         }
         bw.flush();
         bw.close();
     }
 
-    public static int priority(String operator) {
-        if (operator.equals("*") || operator.equals("/")) {
-            return 2;
-        } else if (operator.equals("(")) {
-            return 0;
-        } else {
-            return 1;
-        }
+    public int priority(char c) {
+        return switch (c) {
+            case '(' -> 0;
+            case '*', '/' -> 2;
+            default -> 1;
+        };
     }
-
 }
-
 public class Main {
     public static void main(String[] args) throws IOException {
         Solution s = new Solution();
