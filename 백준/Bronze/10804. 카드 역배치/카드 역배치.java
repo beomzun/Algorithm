@@ -1,35 +1,27 @@
 import java.util.*;
 import java.io.*;
 
-class Solution {
+class O_Solution {
     public void solution() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+//        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringTokenizer st;
-
         int[] arr = new int[21];
         for (int i = 1; i < 21; i++) {
             arr[i] = i;
         }
 
-        List<Pair> list = new ArrayList<>();
+        Stack<Integer> stack = new Stack<>();
         for (int i = 0; i < 10; i++) {
             st = new StringTokenizer(br.readLine());
-            int start = Integer.parseInt(st.nextToken());
-            int end = Integer.parseInt(st.nextToken());
-            list.add(new Pair(start, end));
-        }
+            int s = Integer.parseInt(st.nextToken());
+            int e = Integer.parseInt(st.nextToken());
 
-        for(Pair pair : list) {
-            int start = pair.start;
-            int end = pair.end;
-            while (start < end) {
-                int tmp = arr[start];
-                arr[start]=arr[end];
-                arr[end] = tmp;
-
-                start++;
-                end--;
+            for (int j = s; j <= e; j++) {
+                stack.add(arr[j]);
+            }
+            for (int j = s; j <= e; j++) {
+                arr[j] = stack.pop();
             }
         }
 
@@ -38,26 +30,14 @@ class Solution {
             sb.append(arr[i]).append(" ");
         }
 
-        bw.write(sb.toString());
-        bw.flush();
-        bw.close();
+        System.out.println(sb);
+
     }
 }
-
-class Pair {
-    int start;
-    int end;
-
-    public Pair(int start, int end) {
-        this.start = start;
-        this.end = end;
-    }
-}
-
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        Solution s = new Solution();
+        O_Solution s = new O_Solution();
         s.solution();
     }
 }
