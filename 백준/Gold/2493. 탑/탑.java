@@ -10,21 +10,18 @@ class Solution {
         StringTokenizer st = new StringTokenizer(br.readLine());
 
         StringBuilder sb = new StringBuilder();
-        Stack<Integer> stack = new Stack<>();
-        Map<Integer, Integer> map = new HashMap<>();
+        Stack<Pair> stack = new Stack<>();
         for (int i = 1; i <= n; i++) {
             int high = Integer.parseInt(st.nextToken());
             while (true) {
                 if (stack.isEmpty()) {
                     sb.append("0 ");
-                    stack.add(high);
-                    map.put(high, i);
+                    stack.add(new Pair(i, high));
                     break;
                 } else {
-                    if(stack.peek() > high) {
-                        sb.append(map.get(stack.peek())).append(" ");
-                        stack.add(high);
-                        map.put(high, i);
+                    if(stack.peek().high > high) {
+                        sb.append(stack.peek().pos).append(" ");
+                        stack.add(new Pair(i, high));
                         break;
                     }
                     stack.pop();
@@ -34,6 +31,15 @@ class Solution {
         bw.write(sb.toString());
         bw.flush();
         bw.close();
+    }
+}
+class Pair {
+    int pos;
+    int high;
+
+    Pair(int pos, int high) {
+        this.pos = pos;
+        this.high = high;
     }
 }
 public class Main {
