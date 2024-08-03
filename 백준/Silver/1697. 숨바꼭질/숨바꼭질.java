@@ -10,49 +10,33 @@ class Solution {
         int target = Integer.parseInt(st.nextToken());
 
         Queue<Integer> queue = new LinkedList<>();
-        Map<Integer, Integer> map = new HashMap<>();
-        map.put(s, 0);
+        boolean[] visit = new boolean[100001];
+        visit[s] = true;
         queue.add(s);
 
-        int tmp = 0;
-        int result = 0;
-        boolean out = false;
-        if (s == target) {
-            System.out.println(0);
-            return;
-        }
-
+        int time = 0;
         while(!queue.isEmpty()) {
-            int now = queue.remove();
-            int val = map.get(now);
-            for (int i = 0; i < 3; i++) {
-                tmp = switch (i) {
-                    case 0 -> now + 1;
-                    case 1 -> now - 1;
-                    case 2 -> now * 2;
-                    default -> tmp;
-                };
-
-                if (tmp > 200000) {
-                    continue;
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                int val = queue.remove();
+                if (val == target) {
+                    System.out.println(time);
                 }
-                if (tmp == target) {
-                    out = true;
-                    result = val + 1;
-                    break;
+                if (val + 1 <= 100000 && !visit[val + 1]) {
+                    visit[val + 1] = true;
+                    queue.add(val+1);
                 }
-                if (!map.containsKey(tmp)) {
-                    map.put(tmp, val + 1);
-                    queue.add(tmp);
+                if (val - 1 >= 0 && !visit[val - 1]) {
+                    visit[val - 1] = true;
+                    queue.add(val - 1);
+                }
+                if (val * 2 <= 100000 && !visit[val * 2]) {
+                    visit[val*2] = true;
+                    queue.add(val * 2);
                 }
             }
-            if (out) {
-                break;
-            }
+            time++;
         }
-        bw.write(result + "");
-        bw.flush();
-        bw.close();
     }
 }
 public class Main {
