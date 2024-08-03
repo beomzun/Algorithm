@@ -1,75 +1,70 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
 
 class Solution {
-
-    static int[] dy = {-1, 1, 0, 0};
-    static int[] dx = {0, 0, -1, 1};
     public void solution() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        int x = Integer.parseInt(st.nextToken());
-        int y = Integer.parseInt(st.nextToken());
-        int[][] arr = new int[y][x];
-        Queue<int[]> queue = new LinkedList<>();
-        for (int i = 0; i < y; i++) {
+
+        int column = Integer.parseInt(st.nextToken());
+        int row = Integer.parseInt(st.nextToken());
+        int[][] box = new int[row][column];
+        int[] dx = {0, -1, 1, 0};
+        int[] dy = {-1, 0, 0, 1};
+        Queue<Point> queue = new LinkedList<>();
+        for (int i = 0; i < row; i++) {
             st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < x; j++) {
-                arr[i][j] = Integer.parseInt(st.nextToken());
-                if (arr[i][j] == 1) {
-                    queue.add(new int[]{i, j});
+            for (int j = 0; j < column; j++) {
+                box[i][j] = Integer.parseInt(st.nextToken());
+                if (box[i][j] == 1) {
+                    queue.add(new Point(i, j));
                 }
             }
         }
-        int[] tmp;
-        int nowY, nowX;
-        int nextY, nextX;
-        int day = 0;
-        while (!queue.isEmpty()) {
-            tmp = queue.remove();
-            nowY = tmp[0];
-            nowX = tmp[1];
-            day = arr[nowY][nowX];
+
+        int day = 1;
+        while(!queue.isEmpty()) {
+            Point p = queue.remove();
             for (int i = 0; i < 4; i++) {
-                nextY = nowY + dy[i];
-                nextX = nowX + dx[i];
-                if (nextY < 0 || nextY >= y || nextX < 0 || nextX >= x) {
+                int tmp_r = p.row + dy[i];
+                int tmp_c = p.col + dx[i];
+                if (tmp_r < 0 || tmp_r >= row || tmp_c < 0 || tmp_c >= column) {
                     continue;
                 }
-                if (arr[nextY][nextX] == 0) {
-                    arr[nextY][nextX] = arr[nowY][nowX] + 1;
-                    queue.add(new int[]{nextY, nextX});
+                if (box[tmp_r][tmp_c] == 0) {
+                    box[tmp_r][tmp_c] = box[p.row][p.col] + 1;
+                    day = box[tmp_r][tmp_c];
+                    queue.add(new Point(tmp_r, tmp_c));
                 }
-//                else if (arr[nextY][nextX] > 1) {
-//                    arr[nextY][nextX] = Math.min(arr[nextY][nextX], arr[nowY][nowX] + 1);
-//                }
             }
         }
-        for (int i = 0; i < y; i++) {
-            for (int j = 0; j < x; j++) {
-                if (arr[i][j] == 0) {
-                    bw.write(String.valueOf(-1));
-                    bw.flush();
-                    bw.close();
+
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < column; j++) {
+                if (box[i][j] == 0) {
+                    System.out.println(-1);
                     return;
                 }
             }
         }
-        bw.write(String.valueOf(day - 1));
+
+        bw.write(day - 1 + "");
         bw.flush();
         bw.close();
     }
 }
-
+class Point {
+    int row;
+    int col;
+    Point(int row, int col) {
+        this.row = row;
+        this.col = col;
+    }
+}
 public class Main {
+
     public static void main(String[] args) throws IOException {
         Solution s = new Solution();
         s.solution();
