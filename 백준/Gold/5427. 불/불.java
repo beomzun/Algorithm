@@ -1,6 +1,9 @@
 import java.util.*;
 import java.io.*;
 class Solution {
+    static Queue<Point> queue = new LinkedList<>();
+    static int[] dy = {-1, 0, 0, 1};
+    static int[] dx = {0, -1, 1, 0};
     public void solution() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -11,8 +14,7 @@ class Solution {
             int row = Integer.parseInt(st.nextToken());
             char[][] building = new char[row][col];
             int[][] fire = new int[row][col];
-
-            Queue<Point> queue = new LinkedList<>();
+            
             Point sg = null;
             for (int j = 0; j < row; j++) {
                 String s = br.readLine();
@@ -28,59 +30,58 @@ class Solution {
                 }
             }
 
-            int[] dy = {-1, 0, 0, 1};
-            int[] dx = {0, -1, 1, 0};
-            while(!queue.isEmpty()) {
-                int size = queue.size();
-                for (int j = 0; j < size; j++) {
-                    Point p = queue.remove();
-                    for (int k = 0; k < 4; k++) {
-                        int nowY = p.row + dy[k];
-                        int nowX = p.col + dx[k];
-
-                        if (nowY < 0 || nowY >= row || nowX < 0 || nowX >= col) {
-                            continue;
-                        }
-                        if ((building[nowY][nowX] == '.' || building[nowY][nowX] == '@') && fire[nowY][nowX] == 0) {
-                            queue.add(new Point(nowY, nowX));
-                            fire[nowY][nowX] = fire[p.row][p.col] + 1;
-                        }
-                    }
-                }
-            }
-
+            fireBfs(row, col, building, fire);
             queue.add(new Point(sg.row, sg.col));
-            String result = "IMPOSSIBLE";
-            int time = 0;
-            boolean out = false;
-            while(!queue.isEmpty()) {
-                int size = queue.size();
-                for (int j = 0; j < size; j++) {
-                    Point p = queue.remove();
-                    for (int k = 0; k < 4; k++) {
-                        int nowY = p.row + dy[k];
-                        int nowX = p.col + dx[k];
-
-                        if (nowY < 0 || nowY >= row || nowX < 0 || nowX >= col) {
-                            out = true;
-                            result = String.valueOf(time + 1);
-                            break;
-                        }
-                        if (building[nowY][nowX] == '.' && (time + 1 < fire[nowY][nowX] || fire[nowY][nowX] == 0)) {
-                            building[nowY][nowX] = '*';
-                            queue.add(new Point(nowY, nowX));
-                        }
-                    }
-                }
-                if (out) {
-                    break;
-                }
-                time++;
-            }
-            bw.write(result + "\n");
+            bw.write(sgBfs(row, col, building, fire) + "\n");
         }
         bw.flush();
         bw.close();
+    }
+
+    public void fireBfs(int row, int col, char[][] building, int[][] fire) {
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            for (int j = 0; j < size; j++) {
+                Point p = queue.remove();
+                for (int k = 0; k < 4; k++) {
+                    int nowY = p.row + dy[k];
+                    int nowX = p.col + dx[k];
+
+                    if (nowY < 0 || nowY >= row || nowX < 0 || nowX >= col) {
+                        continue;
+                    }
+                    if ((building[nowY][nowX] == '.' || building[nowY][nowX] == '@') && fire[nowY][nowX] == 0) {
+                        queue.add(new Point(nowY, nowX));
+                        fire[nowY][nowX] = fire[p.row][p.col] + 1;
+                    }
+                }
+            }
+        }
+    }
+
+    public String sgBfs(int row, int col, char[][] building, int[][] fire) {
+        String result = "IMPOSSIBLE";
+        int time = 0;
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            for (int j = 0; j < size; j++) {
+                Point p = queue.remove();
+                for (int k = 0; k < 4; k++) {
+                    int nowY = p.row + dy[k];
+                    int nowX = p.col + dx[k];
+
+                    if (nowY < 0 || nowY >= row || nowX < 0 || nowX >= col) {
+                        return String.valueOf(time + 1);
+                    }
+                    if (building[nowY][nowX] == '.' && (time + 1 < fire[nowY][nowX] || fire[nowY][nowX] == 0)) {
+                        building[nowY][nowX] = '*';
+                        queue.add(new Point(nowY, nowX));
+                    }
+                }
+            }
+            time++;
+        }
+        return result;
     }
 }
 class Point {
