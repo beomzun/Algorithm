@@ -14,7 +14,7 @@ class Solution {
             int row = Integer.parseInt(st.nextToken());
             char[][] building = new char[row][col];
             int[][] fire = new int[row][col];
-            
+
             Point sg = null;
             for (int j = 0; j < row; j++) {
                 String s = br.readLine();
@@ -61,7 +61,7 @@ class Solution {
 
     public String sgBfs(int row, int col, char[][] building, int[][] fire) {
         String result = "IMPOSSIBLE";
-        int time = 0;
+        int time = 1;
         while(!queue.isEmpty()) {
             int size = queue.size();
             for (int j = 0; j < size; j++) {
@@ -71,9 +71,9 @@ class Solution {
                     int nowX = p.col + dx[k];
 
                     if (nowY < 0 || nowY >= row || nowX < 0 || nowX >= col) {
-                        return String.valueOf(time + 1);
+                        return String.valueOf(time);
                     }
-                    if (building[nowY][nowX] == '.' && (time + 1 < fire[nowY][nowX] || fire[nowY][nowX] == 0)) {
+                    if (building[nowY][nowX] == '.' && (time < fire[nowY][nowX] || fire[nowY][nowX] == 0)) {
                         building[nowY][nowX] = '*';
                         queue.add(new Point(nowY, nowX));
                     }
