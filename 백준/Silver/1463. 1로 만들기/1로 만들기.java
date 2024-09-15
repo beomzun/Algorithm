@@ -1,38 +1,32 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-
+import java.util.*;
+import java.io.*;
 class Solution {
-
     public void solution() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-
-        int n = Integer.parseInt(br.readLine());
-        int[] arr = new int[n+1];
-        arr[1] = 0;
-        for (int i = 2; i <= n; i++) {
+        int N = Integer.parseInt(br.readLine());
+        int[] times = new int[N + 1];
+        times[1] = 0;
+        for (int i = 2; i <= N; i++) {
             if (i % 3 == 0 && i % 2 == 0) {
-                arr[i] = Math.min(Math.min(arr[i / 3], arr[i / 2]), arr[i - 1]) + 1;
+                times[i] = Math.min(Math.min(times[i / 3], times[i / 2]), times[i - 1]) + 1;
             } else if (i % 3 == 0) {
-                arr[i] = Math.min(arr[i / 3], arr[i - 1]) + 1;
+                times[i] = Math.min(times[i / 3], times[i - 1]) + 1;
             } else if (i % 2 == 0) {
-                arr[i] = Math.min(arr[i / 2], arr[i - 1]) + 1;
+                times[i] = Math.min(times[i / 2], times[i - 1]) + 1;
             } else {
-                arr[i] = arr[i - 1] + 1;
+                times[i] = times[i - 1] + 1;
             }
         }
-        bw.write(String.valueOf(arr[n]));
-        bw.flush();
-        bw.close();
+        System.out.println(times[N]);
     }
 }
-
 public class Main {
+
     public static void main(String[] args) throws IOException {
         Solution s = new Solution();
         s.solution();
     }
 }
+/*
+DP를 사용하여 1부터 거꾸로 자신에게 올 수중 가장 가까운 횟수 찾기
+ */
