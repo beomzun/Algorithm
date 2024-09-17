@@ -1,40 +1,37 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-
+import java.util.*;
+import java.io.*;
 class Solution {
-
     public void solution() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        int N = Integer.parseInt(br.readLine());
+        int[] score = new int[N + 1];
+        for (int i = 1; i <= N; i++) {
+            score[i] = Integer.parseInt(br.readLine());
+        }
 
-        int n = Integer.parseInt(br.readLine());
-        int[] arr = new int[n];
-        for (int i = 0; i < n; i++) {
-            arr[i] = Integer.parseInt(br.readLine());
+        int[] max = new int[N + 1];
+        max[1] = score[1];
+        if (N >= 2) {
+            max[2] = score[1] + score[2];
         }
-        int[][] score = new int[2][n];
-        score[0][0] = arr[0];
-        score[1][0] = 0;
-        if (n != 1) {
-            score[0][1] = arr[0] + arr[1];
-            score[1][1] = arr[0];
+
+        for (int i = 3; i <= N; i++) {
+            max[i] = Math.max(max[i - 2], max[i - 3] + score[i - 1]) + score[i];
         }
-        for (int i = 2; i < n; i++) {
-            score[0][i] = Math.max(score[1][i - 2] + arr[i - 1], score[0][i - 2]) + arr[i];
-            score[1][i] = score[0][i - 1];
-        }
-        bw.write(String.valueOf(score[0][n-1]));
-        bw.flush();
-        bw.close();
+
+        System.out.println(max[N]);
     }
 }
-
 public class Main {
+
     public static void main(String[] args) throws IOException {
         Solution s = new Solution();
         s.solution();
     }
 }
+/*
+5 4 3 2
+네번째 계단
+542
+532
+ */
