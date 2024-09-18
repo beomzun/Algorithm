@@ -1,70 +1,74 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.*;
+import java.io.*;
+class Solution {
+    static int N;
+    static int M;
+    static ArrayList<Integer>[] graph;
+    static boolean[] visit;
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-public class Main {
-    public static ArrayList<Integer>[] edge;
-    public static boolean[] visited;
-
-    public static void main(String[] args) throws IOException {
+    public void solution() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int v = Integer.parseInt(st.nextToken());   //정점 개수
-        int e = Integer.parseInt(st.nextToken());   //간선 개수
-        int s = Integer.parseInt(st.nextToken());   //시작 정점
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        int V = Integer.parseInt(st.nextToken());
 
-        edge = new ArrayList[v + 1];
-        visited = new boolean[v + 1];
-
-        for (int i = 1; i <= v; i++) {
-            edge[i] = new ArrayList<>();
+        graph = new ArrayList[N + 1];
+        for (int i = 1; i <= N; i++) {
+            graph[i] = new ArrayList<>();
         }
-        for (int i = 1; i <= e; i++) {
+
+        for (int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine());
-
-            int x = Integer.parseInt(st.nextToken());
-            int y = Integer.parseInt(st.nextToken());
-            edge[x].add(y);
-            edge[y].add(x);
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            graph[a].add(b);
+            graph[b].add(a);
         }
 
-        for (int i = 1; i <= v; i++) {
-            Collections.sort(edge[i]);
+        for (int i = 1; i <= N; i++) {
+            Collections.sort(graph[i]);
         }
 
-        dfs(s);
-        System.out.println();
-        Arrays.fill(visited, false);
-        bfs(s);
+        visit = new boolean[N + 1];
+        bw.write(V + " ");
+        dfs(V);
+        bw.write("\n");
 
-        br.close();
+        visit = new boolean[N + 1];
+        Queue<Integer> q = new ArrayDeque<>();
+        q.add(V);
+        visit[V] = true;
+        while (!q.isEmpty()) {
+            int val = q.remove();
+            bw.write(val + " ");
+            for (int i : graph[val]) {
+                if (!visit[i]) {
+                    visit[i] = true;
+                    q.add(i);
+                }
+            }
+        }
+
+        bw.flush();
+        bw.close();
     }
 
-    public static void dfs(int s) {
-        System.out.print(s + " ");
-        visited[s] = true;
-        for (int i : edge[s]) {
-            if (!visited[i]) {
+    public void dfs(int val) throws IOException {
+        visit[val] = true;
+        for (int i : graph[val]) {
+            if (!visit[i]) {
+                bw.write(i + " ");
                 dfs(i);
             }
         }
     }
+}
+public class Main {
 
-    public static void bfs(int s) {
-        Queue<Integer> queue = new LinkedList<>();
-        queue.add(s);
-        visited[s] = true;
-
-        while (!queue.isEmpty()) {
-            int node = queue.poll();
-            System.out.print(node + " ");
-            for (int i : edge[node]) {
-                if (!visited[i]) {
-                    visited[i] = true;
-                    queue.add(i);
-                }
-            }
-        }
+    public static void main(String[] args) throws IOException {
+        Solution s = new Solution();
+        s.solution();
     }
 }
