@@ -6,27 +6,20 @@ class Solution {
         StringTokenizer st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
-        int[][] square = new int[N][M];
+        int[][] square = new int[N + 1][M + 1];
 
-        for (int i = 0; i < N; i++) {
+        for (int i = 1; i <= N; i++) {
             String s = br.readLine();
-            for (int j = 0; j < M; j++) {
-                square[i][j] = Character.getNumericValue(s.charAt(j));
+            for (int j = 1; j <= M; j++) {
+                square[i][j] = Character.getNumericValue(s.charAt(j-1));
             }
         }
 
         int max = 0;
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
-                if (i == 0 || j == 0) {
-                    if (square[i][j] == 1) {
-                        max = Math.max(max, square[i][j]);
-                    }
-                    continue;
-                }
-                if (square[i][j] > 0) {
-                    int min = Math.min(square[i - 1][j - 1], Math.min(square[i - 1][j], square[i][j - 1]));
-                    square[i][j] = min + 1;
+        for (int i = 1; i <= N; i++) {
+            for (int j = 1; j <= M; j++) {
+                if (square[i][j] == 1) {
+                    square[i][j] = Math.min(square[i - 1][j - 1], Math.min(square[i - 1][j], square[i][j - 1])) + 1;
                     max = Math.max(max, square[i][j]);
                 }
             }
