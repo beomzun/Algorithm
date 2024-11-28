@@ -5,7 +5,8 @@ class Solution {
     ArrayList<Integer>[] graph;
     int R;
     BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-    Map<Integer, Integer> counts = new HashMap<>();
+    int[] counts;
+
     public void solution() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -13,6 +14,7 @@ class Solution {
         R = Integer.parseInt(st.nextToken());
         int Q = Integer.parseInt(st.nextToken());
         graph = new ArrayList[N + 1];
+        counts = new int[N + 1];
         for (int i = 1; i <= N; i++) {
             graph[i] = new ArrayList<>();
         }
@@ -26,9 +28,8 @@ class Solution {
         visit = new boolean[N + 1];
         dfs(R);
         for (int i = 0; i < Q; i++) {
-            Arrays.fill(visit, false);
             int U = Integer.parseInt(br.readLine());
-            bw.write(counts.get(U) + "\n");
+            bw.write(counts[U] + "\n");
         }
         bw.flush();
     }
@@ -41,7 +42,7 @@ class Solution {
             }
             count += dfs(next);
         }
-        counts.put(start, count);
+        counts[start] = count;
         return count;
     }
 }
