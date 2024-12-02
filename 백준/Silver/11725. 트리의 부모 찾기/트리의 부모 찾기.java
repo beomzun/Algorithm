@@ -3,7 +3,7 @@ import java.io.*;
 class Solution {
     public void solution() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringBuilder sb = new StringBuilder();
         int N = Integer.parseInt(br.readLine());
         StringTokenizer st;
         ArrayList<Integer>[] graph = new ArrayList[N + 1];
@@ -19,25 +19,25 @@ class Solution {
             graph[b].add(a);
         }
         visit[1] = true;
-        Queue<Integer> q = new LinkedList<>();
+        Queue<Integer> q = new ArrayDeque<>();
         q.add(1);
 
-        Map<Integer, Integer> parents = new HashMap<>();
+        int[] parents = new int[N + 1];
         while (!q.isEmpty()) {
             int now = q.remove();
             for (int link : graph[now]) {
                 if (visit[link]) {
                     continue;
                 }
-                parents.put(link, now);
+                parents[link] = now;
                 visit[link] = true;
                 q.add(link);
             }
         }
         for (int i = 2; i <= N; i++) {
-            bw.write(parents.get(i) + "\n");
+            sb.append(parents[i]).append("\n");
         }
-        bw.flush();
+        System.out.println(sb);
     }
 }
 public class Main {
