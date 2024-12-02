@@ -19,7 +19,7 @@ class Solution {
             graph[b].add(a);
         }
         visit[1] = true;
-        Queue<Integer> q = new ArrayDeque<>();
+        Queue<Integer> q = new LinkedList<>();
         q.add(1);
 
         Map<Integer, Integer> parents = new HashMap<>();
