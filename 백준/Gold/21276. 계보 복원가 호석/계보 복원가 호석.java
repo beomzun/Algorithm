@@ -54,6 +54,7 @@ class Solution {
         }
         for (String name : results.keySet()) {
             sb.append(name).append(" ").append(results.get(name).size()).append(" ");
+            Collections.sort(results.get(name));
             for (String child : results.get(name)) {
                 sb.append(child).append(" ");
             }
