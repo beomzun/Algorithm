@@ -20,29 +20,30 @@ class Solution {
         for (int i = 1; i <= N; i++) {
             graph[i] = new ArrayList<>();
         }
+        int max = 0;
         for (int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
             int c = Integer.parseInt(st.nextToken());
+            max = Math.max(c, max);
             graph[a].add(new int[]{b, c});
             graph[b].add(new int[]{a, c});
         }
 
         int left = 1;
-        int billion = 1_000_000_000;
-        int right = billion;
+        int right = max + 1;
         while (left < right) {
             int mid = (left + right) / 2;
             if (dijkstra(mid)) {
                 right = mid;
                 continue;
             }
-            
+
             left = mid + 1;
         }
 
-        System.out.println(right == billion ? -1 : right);
+        System.out.println(right == max + 1 ? -1 : right);
     }
     public boolean dijkstra(int max) {
         boolean[] visit = new boolean[N+1];
