@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
 class Solution {
-    int max = 1;
+    int max = 0;
     int R;
     int C;
     int[][] board;
@@ -28,20 +28,17 @@ class Solution {
 
     public void dfs(int r, int c, int count) {
         int now = board[r][c];
-        if (visit[now]) {
-            max = Math.max(max, count - 1);
-            return;
-        }
 
         visit[now] = true;
         for (int i = 0; i < 4; i++) {
             int nY = r + dy[i];
             int nX = c + dx[i];
-            if (nY < 0 || nY >= R || nX < 0 || nX >= C) {
+            if (nY < 0 || nY >= R || nX < 0 || nX >= C || visit[board[nY][nX]]) {
                 continue;
             }
             dfs(nY, nX, count + 1);
         }
+        max = Math.max(max, count);
         visit[now] = false;
     }
 }
