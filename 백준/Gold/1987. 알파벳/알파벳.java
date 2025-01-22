@@ -8,6 +8,7 @@ class Solution {
     boolean[] visit = new boolean[26];
     int[] dy = {-1, 0, 1, 0};
     int[] dx = {0, -1, 0, 1};
+    Set<Integer> set = new HashSet<>();
 
     public void solution() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -19,6 +20,7 @@ class Solution {
             String s = br.readLine();
             for (int j = 0; j < C; j++) {
                 board[i][j] = s.charAt(j) - 'A';
+                set.add(board[i][j]);
             }
         }
         dfs(0, 0, 1);
@@ -28,6 +30,10 @@ class Solution {
 
     public void dfs(int r, int c, int count) {
         int now = board[r][c];
+        max = Math.max(max, count);
+        if (max == set.size()) {
+            return;
+        }
 
         visit[now] = true;
         for (int i = 0; i < 4; i++) {
@@ -38,7 +44,6 @@ class Solution {
             }
             dfs(nY, nX, count + 1);
         }
-        max = Math.max(max, count);
         visit[now] = false;
     }
 }
