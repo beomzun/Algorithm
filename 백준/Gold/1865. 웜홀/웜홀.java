@@ -10,15 +10,15 @@ class Solution {
             int N = Integer.parseInt(st.nextToken());
             int M = Integer.parseInt(st.nextToken());
             int W = Integer.parseInt(st.nextToken());
-            ArrayList<Edge> edges = new ArrayList<>();
+            Edge[] edges = new Edge[M * 2 + W];
             //도로는 양방향 시간은 흐른다.
-            for (int i = 0; i < M; i++) {
+            for (int i = 0, idx = 0; i < M; i++) {
                 st = new StringTokenizer(br.readLine());
                 int S = Integer.parseInt(st.nextToken());
                 int E = Integer.parseInt(st.nextToken());
                 int T = Integer.parseInt(st.nextToken());
-                edges.add(new Edge(S, E, T));
-                edges.add(new Edge(E, S, T));
+                edges[idx++] = new Edge(S, E, T);
+                edges[idx++] = new Edge(E, S, T);
             }
             //웜홀은 단방향 시간은 역순으로
             for (int i = 0; i < W; i++) {
@@ -26,7 +26,7 @@ class Solution {
                 int S = Integer.parseInt(st.nextToken());
                 int E = Integer.parseInt(st.nextToken());
                 int T = Integer.parseInt(st.nextToken());
-                edges.add(new Edge(S, E, -T));
+                edges[M * 2 + i] = new Edge(S, E, -T);
             }
 
             int[] dis = new int[N + 1];
