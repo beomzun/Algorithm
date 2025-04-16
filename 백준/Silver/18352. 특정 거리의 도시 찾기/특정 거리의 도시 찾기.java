@@ -27,7 +27,7 @@ class Solution {
         int time = 1;
         Queue<Integer> q = new ArrayDeque<>();
         q.add(X);
-        while(!q.isEmpty()) {
+        while(!q.isEmpty() && time<=K) {
             int size = q.size();
             while(size-->0) {
                 int now = q.remove();
