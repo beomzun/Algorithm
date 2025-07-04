@@ -1,3 +1,7 @@
+# select sum(price) as total_price
+# from item_info
+# where rarity="LEGEND"
+
 select sum(price) as total_price
 from item_info
-where rarity="LEGEND"
+where rarity='LEGEND'
