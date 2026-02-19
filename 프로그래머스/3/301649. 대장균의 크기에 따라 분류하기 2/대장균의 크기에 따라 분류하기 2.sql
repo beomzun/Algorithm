@@ -1,10 +1,23 @@
-select e.id, 
+# select e.id, 
+# case
+#     when e.rnk<=0.25 then 'CRITICAL'
+#     when e.rnk<=0.5 then 'HIGH'
+#     when e.rnk<=0.75 then 'MEDIUM'
+#     else 'LOW'
+# end as colony_name
+# from (
+#     select id, percent_rank() over(order by size_of_colony desc) as rnk
+#     from ecoli_data
+# ) as e
+# order by e.id asc
+
+select e.id,
 case
-    when e.rnk<=0.25 then 'CRITICAL'
-    when e.rnk<=0.5 then 'HIGH'
-    when e.rnk<=0.75 then 'MEDIUM'
-    else 'LOW'
-end as colony_name
+    when e.rnk<=0.25 then "CRITICAL"
+    when e.rnk<=0.5 then "HIGH"
+    when e.rnk<=0.75 then "MEDIUM"
+    else "LOW"
+end colony_name
 from (
     select id, percent_rank() over(order by size_of_colony desc) as rnk
     from ecoli_data
